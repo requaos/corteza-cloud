@@ -13,6 +13,7 @@ jwt_secret = "your-greater-than-thirty-character-javascript-web-token-secret"
 ### This project assumes you are working in a *nix environment
 - Have [Terraform](https://terraform.io) installed
 - Have a [DigitalOcean](https://digitalocean.com) account and have generated an [API Key](https://cloud.digitalocean.com/account/api/tokens)
+- Have a domain name configured with DigitalOcean's nameserver addresses.
 - Have a public ssh key at `~/.ssh/id_rsa.pub`
 
 ### Terraform
