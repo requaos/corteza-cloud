@@ -1,0 +1,5 @@
+.terraform
+.DS_Store
+.vscode
+.idea
+secrets.sh

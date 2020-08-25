@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  server:
+    image: cortezaproject/corteza-server-monolith:${VERSION}
+    restart: on-failure
+    env_file: [ .env ]
+    depends_on: [ corredor ]
+    networks: [ proxy, internal ]
+    environment:
+      VIRTUAL_HOST:     api.${DOMAIN}
+      LETSENCRYPT_HOST: api.${DOMAIN}
+      CORREDOR_API_BASE_URL_COMPOSE:   https://api.${DOMAIN}/compose
+      CORREDOR_API_BASE_URL_MESSAGING: https://api.${DOMAIN}/messaging
+      CORREDOR_API_BASE_URL_SYSTEM:    https://api.${DOMAIN}/system
+    # Uncomment to use local fs for data persistence
+    volumes:
+      - "./data/server:/data"
+
+  corredor:
+    image: cortezaproject/corteza-server-corredor:${VERSION}
+    networks: [ internal ]
+    restart: on-failure
+    env_file: [ .env ]
+    volumes:
+      - "./data/scripts:/corredor/usr"
+
+  webapp:
+    image: cortezaproject/corteza-webapp:${VERSION}
+    restart: on-failure
+    depends_on: [ server ]
+    networks: [ proxy ]
+    environment:
+      MONOLITH_API:     "true"
+      VIRTUAL_HOST:     ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+
+networks:
+  internal: {}
+  proxy: { external: true }
+
