@@ -17,7 +17,7 @@ data "template_file" "env" {
     VERSION    = var.corteza_version
     SMTP_HOST  = var.smtp_host
     SMTP_USER  = var.smtp_user
-    SMTP_PASS  = var.smtp_pass
+    SMTP_PASS  = var.smtp_password
   }
 }
 
@@ -28,7 +28,9 @@ data "template_file" "userdata" {
     userdata_sshkey           = var.sshkey
     corteza_env               = base64encode(data.template_file.env.rendered)
     corteza_compose           = base64encode(file("${path.module}/../corteza/docker-compose.yml"))
+    corteza_service           = base64encode(file("${path.module}/../corteza/corteza.service"))
     corteza_nginx_custom_conf = base64encode(file("${path.module}/../corteza-nginx/custom.conf"))
     corteza_nginx_compose     = base64encode(file("${path.module}/../corteza-nginx/docker-compose.yml"))
+    corteza_nginx_service     = base64encode(file("${path.module}/../corteza-nginx/letsencrypt-nginx.service"))
   }
 }

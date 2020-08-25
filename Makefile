@@ -1,11 +1,15 @@
-
-
-SECRETS=""
-ifeq (,$(wildcard ./secrets.sh))
-    SECRETS=source ./secrets.sh
-endif
-
+SHELL=/bin/bash
 BUILD_HASH=$(shell git rev-parse --short HEAD)
+SSH_KEY=$(shell cat ~/.ssh/id_rsa.pub)
 
 plan:
-	${SECRETS} && cd terraform && echo terraform plan -var "sshkey=${SSH_PUB_KEY}" -var "jwt_secret=${JWT_SECRET}" -var "build_hash=${BUILD_HASH}" -var "token=$TOKEN" && cd ..
+	@cd terraform && \
+	sudo terraform init && \
+	sudo terraform plan -var "sshkey=${SSH_KEY}" -var "build_hash=${BUILD_HASH}" && \
+	cd ..
+
+apply:
+	@cd terraform && terraform apply -var "sshkey=${SSH_KEY}" -var "build_hash=${BUILD_HASH}" && cd ..
+
+destroy:
+	@cd terraform && terraform destroy -var "sshkey=${SSH_KEY}" -var "build_hash=${BUILD_HASH}" && cd ..
