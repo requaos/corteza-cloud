@@ -1,6 +1,6 @@
 # Corteza Project: On DigitalOcean
 
-### This project is designed to work with a local file `variables.auto.tfvars`:
+### This project is designed to work with a local file `terraform/variables.auto.tfvars`:
 ```
 token = "digital-ocean-api-token"
 domain = "example.com"
